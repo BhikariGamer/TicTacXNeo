@@ -3,44 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Super Intelligent Tic Tac Toe</title>
+  <title>Tic Tac Toe</title>
   <style>
     :root {
-      --main-gradient: linear-gradient(135deg, #00f2fe, #4facfe, #43e97b, #f8ffae);
-      --accent-color: #ff6ec7;
-      --x-color: #00d9ff;
-      --o-color: #ff3c7b;
-      --bg-color: #0f2027;
-      --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      --win-glow: 0 0 20px rgba(0,255,150,0.8);
+      --bg-color: #0d1117;
+      --grid-glow: #00f2fe;
+      --x-color: #ff4757;
+      --o-color: #1e90ff;
+      --win-color: #2ecc71;
+      --accent: #ff9ff3;
+      --text-color: #f1f1f1;
     }
 
     body {
       margin: 0;
-      background: var(--bg-gradient);
+      background: var(--bg-color);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      color: white;
-      overflow: hidden;
+      color: var(--text-color);
     }
 
     h1 {
-      font-size: 3rem;
+      font-size: 2.2rem;
+      text-align: center;
       margin-bottom: 1rem;
-      background: var(--main-gradient);
+      background: linear-gradient(90deg, #00f2fe, #4facfe, #00f2fe);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0px 0px 15px rgba(0, 255, 255, 0.5);
-      animation: glowPulse 3s infinite alternate;
-    }
-
-    @keyframes glowPulse {
-      from { text-shadow: 0 0 10px rgba(0,255,255,0.5); }
-      to   { text-shadow: 0 0 25px rgba(255,0,255,0.7); }
+      font-weight: 800;
+      letter-spacing: 1px;
     }
 
     #board {
@@ -52,7 +47,6 @@
 
     .cell {
       background: rgba(255,255,255,0.05);
-      border: 2px solid rgba(255,255,255,0.2);
       border-radius: 16px;
       display: flex;
       align-items: center;
@@ -60,45 +54,41 @@
       font-size: 3rem;
       font-weight: bold;
       cursor: pointer;
-      user-select: none;
-      transition: all 0.3s ease;
-      color: white;
-      text-shadow: 0 0 8px rgba(255,255,255,0.3);
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.4), inset 0 0 10px rgba(255,255,255,0.05);
     }
 
     .cell:hover {
-      background: rgba(255,255,255,0.1);
-      transform: scale(1.05);
-      box-shadow: 0 0 12px rgba(255,255,255,0.3);
+      transform: scale(1.07);
+      box-shadow: 0 0 18px var(--grid-glow), inset 0 0 12px rgba(255,255,255,0.08);
     }
 
     .cell.win {
-      background: rgba(0,255,150,0.2);
-      box-shadow: var(--win-glow);
-      animation: winPulse 1s infinite alternate;
+      background-color: var(--win-color);
+      color: white !important;
+      box-shadow: 0 0 20px var(--win-color);
     }
 
-    @keyframes winPulse {
-      from { box-shadow: 0 0 10px rgba(0,255,150,0.5); }
-      to   { box-shadow: 0 0 30px rgba(0,255,150,1); }
+    .cell:empty::after {
+      content: "";
+      font-size: 2rem;
     }
 
-    /* Different styles for X and O */
-    .cell:contains("X") {
+    .cell:contains("X"), .cell:contains("x") {
       color: var(--x-color);
-      text-shadow: 0 0 12px var(--x-color);
+      text-shadow: 0 0 10px var(--x-color);
     }
 
-    .cell:contains("O") {
+    .cell:contains("O"), .cell:contains("o") {
       color: var(--o-color);
-      text-shadow: 0 0 12px var(--o-color);
+      text-shadow: 0 0 10px var(--o-color);
     }
 
     #message {
       font-size: 1.5rem;
       margin-top: 20px;
-      color: #fff;
-      text-shadow: 0 0 8px rgba(255,255,255,0.4);
+      font-weight: bold;
+      text-shadow: 0 0 8px var(--accent);
     }
 
     button, input[type=range] {
@@ -106,36 +96,30 @@
     }
 
     button {
-      padding: 10px 25px;
+      padding: 10px 20px;
       font-size: 1rem;
       border: none;
-      border-radius: 30px;
-      background: var(--main-gradient);
-      color: #fff;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #ff6ec4, #7873f5);
+      color: white;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.3s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      transition: all 0.3s ease-in-out;
     }
 
     button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 20px rgba(0,255,255,0.6);
+      transform: scale(1.05);
+      box-shadow: 0 0 14px #ff9ff3;
     }
 
     #difficulty {
       margin-top: 10px;
       font-weight: bold;
-      color: #eee;
-      text-shadow: 0 0 5px rgba(255,255,255,0.3);
-    }
-
-    input[type=range] {
-      width: 200px;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
-  <h1>Super Intelligent Tic Tac Toe</h1>
+  <h1>Tic Tac Toe</h1>
   <div id="board"></div>
   <div id="message"></div>
   <div id="difficulty">AI Difficulty: <span id="levelLabel">8</span></div>
@@ -143,23 +127,236 @@
   <button onclick="startGame()">Restart</button>
 
   <script>
-    // your same game logic (unchanged)
-    // ...
+    const boardEl = document.getElementById("board");
+    const messageEl = document.getElementById("message");
+    const levelSlider = document.getElementById("levelSlider");
+    const levelLabel = document.getElementById("levelLabel");
 
-    // (💡 Optional tweak: add special classes for X and O when rendering)
+    let board;
+    let currentPlayer;
+    let gameOver;
+    let aiLevel = parseInt(levelSlider.value);
+
+    levelSlider.addEventListener("input", () => {
+      aiLevel = parseInt(levelSlider.value);
+      levelLabel.textContent = aiLevel;
+    });
+
+    function startGame() {
+      board = Array(9).fill(null);
+      currentPlayer = "X";
+      gameOver = false;
+      messageEl.textContent = "";
+      renderBoard();
+    }
+
     function renderBoard() {
       boardEl.innerHTML = "";
       board.forEach((cell, i) => {
         const cellEl = document.createElement("div");
         cellEl.className = "cell";
-        if (cell) {
-          cellEl.textContent = cell;
-          cellEl.classList.add(cell === "X" ? "xMark" : "oMark");
-        }
+        cellEl.textContent = cell ? cell : "";
         cellEl.addEventListener("click", () => handleMove(i));
         boardEl.appendChild(cellEl);
       });
     }
+
+    function handleMove(index) {
+      if (gameOver || board[index]) return;
+      board[index] = currentPlayer;
+      renderBoard();
+
+      if (checkWin(currentPlayer)) {
+        gameOver = true;
+        highlightWinningCells(currentPlayer);
+        messageEl.textContent = `${currentPlayer} wins!`;
+        return;
+      } else if (isDraw(board)) {
+        gameOver = true;
+        messageEl.textContent = "It's a draw!";
+        return;
+      }
+
+      currentPlayer = currentPlayer === "X" ? "O" : "X";
+      if (currentPlayer === "O") setTimeout(makeAIMove, 200);
+    }
+
+    function makeAIMove() {
+      const move = findBestMove(aiLevel);
+      handleMove(move);
+    }
+
+    const lines = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+
+    function isDraw(b) {
+      return b.every(c => c);
+    }
+
+    function getWinner(b = board) {
+      for (const [a,b1,c] of lines) {
+        if (board[a] && board[a] === board[b1] && board[a] === board[c]) {
+          return board[a];
+        }
+      }
+      return null;
+    }
+
+    function checkWin(player) {
+      return getWinner() === player;
+    }
+
+    function highlightWinningCells(player) {
+      lines.forEach(([a,b,c]) => {
+        if (board[a] === player && board[b] === player && board[c] === player) {
+          const cells = document.querySelectorAll('.cell');
+          cells[a].classList.add('win');
+          cells[b].classList.add('win');
+          cells[c].classList.add('win');
+        }
+      });
+    }
+
+    // ===== AI Logic same as before =====
+    function availableMoves(b) {
+      const moves = [];
+      for (let i = 0; i < 9; i++) if (!b[i]) moves.push(i);
+      return moves;
+    }
+
+    function immediateWinningMove(b, player) {
+      for (const i of availableMoves(b)) {
+        b[i] = player;
+        const win = winnerOf(b);
+        b[i] = null;
+        if (win === player) return i;
+      }
+      return null;
+    }
+
+    function winnerOf(b) {
+      for (const [a,bb,c] of lines) {
+        if (b[a] && b[a] === b[bb] && b[a] === b[c]) return b[a];
+      }
+      return null;
+    }
+
+    function countForks(b, player) {
+      let count = 0;
+      for (const i of availableMoves(b)) {
+        b[i] = player;
+        let threats = 0;
+        for (const [a,bb,c] of lines) {
+          const lineVals = [b[a], b[bb], b[c]];
+          if (lineVals.filter(v => v === player).length === 2 &&
+              lineVals.includes(null)) threats++;
+        }
+        b[i] = null;
+        if (threats >= 2) count++;
+      }
+      return count;
+    }
+
+    function heuristicMove(b) {
+      const me = "O", opp = "X";
+      let m = immediateWinningMove(b, me);
+      if (m !== null) return m;
+      m = immediateWinningMove(b, opp);
+      if (m !== null) return m;
+      for (const i of shuffle(availableMoves(b))) {
+        b[i] = me;
+        if (countForks(b, me) >= 1) { b[i] = null; return i; }
+        b[i] = null;
+      }
+      for (const i of shuffle(availableMoves(b))) {
+        b[i] = opp;
+        if (countForks(b, opp) >= 1) { b[i] = null; return i; }
+        b[i] = null;
+      }
+      if (!b[4]) return 4;
+      const oppCorners = [[0,8],[2,6],[6,2],[8,0]];
+      for (const [oc, meCorner] of oppCorners) {
+        if (b[oc] === opp && !b[meCorner]) return meCorner;
+      }
+      for (const c of [0,2,6,8]) if (!b[c]) return c;
+      for (const s of [1,3,5,7]) if (!b[s]) return s;
+      const av = availableMoves(b);
+      return av[Math.floor(Math.random()*av.length)];
+    }
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function minimaxAB(b, depth, isMax, alpha, beta) {
+      const win = winnerOf(b);
+      if (win === "O") return 10 - depth;
+      if (win === "X") return depth - 10;
+      if (isDraw(b)) return 0;
+
+      if (isMax) {
+        let best = -Infinity;
+        for (const i of availableMoves(b)) {
+          b[i] = "O";
+          best = Math.max(best, minimaxAB(b, depth + 1, false, alpha, beta));
+          b[i] = null;
+          alpha = Math.max(alpha, best);
+          if (beta <= alpha) break;
+        }
+        return best;
+      } else {
+        let best = Infinity;
+        for (const i of availableMoves(b)) {
+          b[i] = "X";
+          best = Math.min(best, minimaxAB(b, depth + 1, true, alpha, beta));
+          b[i] = null;
+          beta = Math.min(beta, best);
+          if (beta <= alpha) break;
+        }
+        return best;
+      }
+    }
+
+    function bestMoveOptimal(b) {
+      let bestScore = -Infinity, move = null;
+      for (const i of availableMoves(b)) {
+        b[i] = "O";
+        const score = minimaxAB(b, 0, false, -Infinity, Infinity);
+        b[i] = null;
+        if (score > bestScore) {
+          bestScore = score;
+          move = i;
+        }
+      }
+      return move;
+    }
+
+    function findBestMove(level) {
+      const b = board.slice();
+      if (level <= 5) {
+        if (Math.random() < 0.7) {
+          if (Math.random() < 0.5) return heuristicMove(b);
+          const av = availableMoves(b);
+          return av[Math.floor(Math.random() * av.length)];
+        }
+        return bestMoveOptimal(b);
+      }
+      if (level <= 10) {
+        if (Math.random() < 0.4) return bestMoveOptimal(b);
+        return heuristicMove(b);
+      }
+      return bestMoveOptimal(b);
+    }
+
+    startGame();
   </script>
 </body>
 </html>
