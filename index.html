@@ -56,6 +56,7 @@
       cursor: pointer;
       transition: all 0.3s ease-in-out;
       box-shadow: 0 0 12px rgba(0, 242, 254, 0.4), inset 0 0 10px rgba(255,255,255,0.05);
+      user-select: none;
     }
 
     .cell:hover {
@@ -69,17 +70,12 @@
       box-shadow: 0 0 20px var(--win-color);
     }
 
-    .cell:empty::after {
-      content: "";
-      font-size: 2rem;
-    }
-
-    .cell:contains("X"), .cell:contains("x") {
+    /* Proper coloring for symbols */
+    .cell.x {
       color: var(--x-color);
       text-shadow: 0 0 10px var(--x-color);
     }
-
-    .cell:contains("O"), .cell:contains("o") {
+    .cell.o {
       color: var(--o-color);
       text-shadow: 0 0 10px var(--o-color);
     }
@@ -155,7 +151,10 @@
       board.forEach((cell, i) => {
         const cellEl = document.createElement("div");
         cellEl.className = "cell";
-        cellEl.textContent = cell ? cell : "";
+        if (cell) {
+          cellEl.textContent = cell;
+          cellEl.classList.add(cell.toLowerCase()); // add x/o class for styling
+        }
         cellEl.addEventListener("click", () => handleMove(i));
         boardEl.appendChild(cellEl);
       });
@@ -220,7 +219,7 @@
       });
     }
 
-    // ===== AI Logic same as before =====
+    // ===== AI Logic (unchanged) =====
     function availableMoves(b) {
       const moves = [];
       for (let i = 0; i < 9; i++) if (!b[i]) moves.push(i);
